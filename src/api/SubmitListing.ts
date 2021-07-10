@@ -1,9 +1,8 @@
 import axios, { AxiosRequestConfig } from "axios";
 import qs from "querystring"
-import { CookieCache } from "redirect-cookies"
 import { CACHE } from "../cache/Cache";
-import { ISettings } from "../settings/SettingsManager";
-import { Services, Country, SubmitListingResponse, ISubmitListingData } from "../utils/Interfaces"
+import { CookieCache } from "../lib/Cache";
+import { SubmitListingResponse, ISubmitListingData } from "../utils/Interfaces"
 
 export async function SubmitListing(listing: ISubmitListingData) {
     const { Currency, Delivery_Time_Offline_Hours, Delivery_Time_Online_Hours, Listing_Description,

@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios"
 import qs from "querystring"
-import { CookieCache } from "redirect-cookies";
 import { CACHE, getCookieStringFromSettings } from "../cache/Cache";
+import { CookieCache } from "../lib/Cache";
 import { ISettings } from "../settings/SettingsManager";
 import { IAccountDeliver } from "../utils/Interfaces";
 

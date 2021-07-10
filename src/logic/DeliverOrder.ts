@@ -1,11 +1,10 @@
 import { ConfirmOrder } from "../api/ConfirmOrder";
 import { IsDebug } from "../debug/Debug";
-import { IAccountDeliver, IAccountJson } from "../utils/Interfaces";
+import { IAccountJson } from "../utils/Interfaces";
 import { StartTradeOrderId } from "../api/StartTrade";
 import { ViewOrderId } from "../api/ViewOrderId";
-import { ISettings } from "../settings/SettingsManager";
 
-export async function DeliverOrder(accountDetails: IAccountJson, ORDER_ID: number, settings: ISettings) {
+export async function DeliverOrder(accountDetails: IAccountJson, ORDER_ID: number) {
     if (IsDebug) return true;
 
     if (!await ViewOrderId(ORDER_ID)) return false;

@@ -1,8 +1,8 @@
 import axios, { AxiosRequestConfig } from "axios"
 import qs from "querystring"
-import { CACHE, getCookieStringFromSettings } from "../cache/Cache";
+import { CACHE } from "../cache/Cache";
+import { CookieCache } from "../lib/Cache";
 import { IViewOrderIDResponse } from "../utils/Interfaces";
-import { CookieCache } from "redirect-cookies"
 export async function ViewOrderId(orderid: number) {
     const data = qs.stringify({
         sell_order_id: orderid

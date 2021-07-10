@@ -1,9 +1,10 @@
 import { AxiosRequestConfig } from "axios";
-import { CookieCache, IHostCache } from "redirect-cookies"
+import { CookieCache } from "../lib/Cache";
+import { IHostCache } from "../lib/interfaces";
 import { SETTINGS } from "../settings/SettingsManager";
 
 
-export const overwriteShasso = () => (req_cfg: AxiosRequestConfig, host_cache: IHostCache) => {
+export function overwriteShasso(req_cfg: AxiosRequestConfig, host_cache: IHostCache) {
 
     const WEBSITE = new URL(req_cfg.url!);
 

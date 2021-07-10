@@ -1,4 +1,4 @@
-import { CookieCache } from "redirect-cookies"
+import { CookieCache } from "../lib/Cache";
 import { ISettings } from "../settings/SettingsManager";
 
 export const CACHE = CookieCache.Create();

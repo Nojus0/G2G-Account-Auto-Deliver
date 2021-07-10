@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios"
 import qs from "querystring"
-import { CookieCache } from "redirect-cookies";
 import { CACHE } from "../cache/Cache";
+import { CookieCache } from "../lib/Cache";
 
 export async function StartTradeOrderId(orderid: number) {
     const data = qs.stringify({

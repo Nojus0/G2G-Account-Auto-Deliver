@@ -1,10 +1,11 @@
-import axios, { AxiosRequestConfig } from "axios";
+import { AxiosRequestConfig } from "axios";
 import { load } from "cheerio";
 import { GetOrdersDebugValid, IsDebug } from "../debug/Debug";
 import { INewOrder, OrderType } from "../utils/Interfaces";
-import { fetchUrlRedirectCallback, CookieCache } from "redirect-cookies"
 import { CACHE } from "../cache/Cache";
 import { overwriteShasso } from "../cache/redirectHandlers";
+import { CookieCache } from "../lib/Cache";
+import { fetchUrlRedirectCallback } from "../lib/callback";
 
 export async function GetOrders(type: OrderType, page: number = 0): Promise<INewOrder[]> {
     if (IsDebug) return GetOrdersDebugValid();
@@ -31,7 +32,7 @@ export async function GetOrders(type: OrderType, page: number = 0): Promise<INew
     };
 
     try {
-        const RESPONSE = await fetchUrlRedirectCallback(config, CACHE, overwriteShasso());
+        const RESPONSE = await fetchUrlRedirectCallback(config, CACHE, overwriteShasso);
 
         return ParseSoldOrdersHtml(load(RESPONSE.data), type);
     } catch (err) { console.log(`Server responded with an error when getting new orders, ${err.message}`); return []; }

@@ -9,7 +9,6 @@ async function main() {
     SetDebug(SETTINGS.IsDebug);
     if (IsDebug) console.log(`STARTED IN DEBUG MODE!`); else console.log(`STARTED!`);
 
-
     console.log(await GetOrders(OrderType.Completed));
     console.log(CACHE)
 }

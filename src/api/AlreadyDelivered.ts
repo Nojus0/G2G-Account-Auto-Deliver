@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import { load } from "cheerio";
 import { INewOrder, IRAWAccount, OrderType } from "../utils/Interfaces";
 import { CACHE, } from "../cache/Cache";
-import { CookieCache } from "redirect-cookies";
+import { CookieCache } from "../lib/Cache";
 
 export async function GetDelivered(OID: number): Promise<IRAWAccount> {
     const config: AxiosRequestConfig = {

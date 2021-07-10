@@ -7,14 +7,12 @@ import { IAccountJson, INewOrder, OrderType } from "../utils/Interfaces";
 import { ISettings } from "../settings/SettingsManager";
 
 export class AutoDeliver {
-    settings: ISettings
     private interval: number
     private accountsPath: string
     private IsRunning: boolean
     private AccountsManager: Config<IAccountJson[]>;
     constructor(settings: ISettings, Interval: number) {
         this.interval = Interval
-        this.settings = settings;
         this.IsRunning = false;
         this.accountsPath = path.join(__dirname, "accounts.json")
         this.AccountsManager = new Config<IAccountJson[]>(this.accountsPath, []);
@@ -49,11 +47,11 @@ export class AutoDeliver {
         if (!this.IsRunning) return;
 
         const NEW_ORDERS: INewOrder[] = await GetOrders(OrderType.NewOrders);
-        
+
         for (const ORDER of NEW_ORDERS) {
             const DELIVERY = this.getSpecifiedDelivery(ORDER.ItemTitle); if (DELIVERY == null) { console.log(`Order recieved but no account was found for specified order title (target_title)`); break; }
 
-            await DeliverOrder(DELIVERY, ORDER.OID, this.settings);
+            await DeliverOrder(DELIVERY, ORDER.OID);
 
             console.log(`Delivered account: ${DELIVERY.account_id}`)
         }
