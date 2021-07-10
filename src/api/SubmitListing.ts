@@ -1,7 +1,8 @@
 import axios, { AxiosRequestConfig } from "axios";
 import qs from "querystring"
 import { CACHE } from "../cache/Cache";
-import { CookieCache } from "../lib/Cache";
+import { overwriteShasso } from "../cache/redirectHandlers";
+import { fetchUrlRedirectCallback } from "../lib/callback";
 import { SubmitListingResponse, ISubmitListingData } from "../utils/Interfaces"
 
 export async function SubmitListing(listing: ISubmitListingData) {
@@ -45,12 +46,11 @@ export async function SubmitListing(listing: ISubmitListingData) {
             'sec-fetch-dest': 'empty',
             'referer': 'https://www.g2g.com/sell/index',
             'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,lt;q=0.7',
-            'cookie': CookieCache.HostCacheToString(CACHE.get("www.g2g.com")!)
         },
         data: data
     };
     try {
-        const response = await axios(config);
+        const response = await fetchUrlRedirectCallback(config, CACHE, overwriteShasso);
         return <SubmitListingResponse>response.data;
     } catch (err) {
         const fail: SubmitListingResponse = { status: false }

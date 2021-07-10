@@ -1,8 +1,8 @@
 import axios, { AxiosRequestConfig } from "axios"
 import qs from "querystring"
-import { CACHE, getCookieStringFromSettings } from "../cache/Cache";
-import { CookieCache } from "../lib/Cache";
-import { ISettings } from "../settings/SettingsManager";
+import { CACHE } from "../cache/Cache";
+import { overwriteShasso } from "../cache/redirectHandlers";
+import { fetchUrlRedirectCallback } from "../lib/callback";
 import { IAccountDeliver } from "../utils/Interfaces";
 
 export async function ConfirmOrder(data: IAccountDeliver) {
@@ -26,13 +26,12 @@ export async function ConfirmOrder(data: IAccountDeliver) {
             'sec-fetch-mode': 'cors',
             'sec-fetch-dest': 'empty',
             'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,lt;q=0.7',
-            'cookie': CookieCache.HostCacheToString(CACHE.get("www.g2g.com")!)
         },
         data: Data
     };
 
     try {
-        await axios(config);
+        await fetchUrlRedirectCallback(config, CACHE, overwriteShasso);
         console.log(`Successfuly completed for order ${data.id}`)
         return true;
     } catch (err) {

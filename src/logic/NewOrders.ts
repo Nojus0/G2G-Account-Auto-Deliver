@@ -4,7 +4,6 @@ import { GetOrdersDebugValid, IsDebug } from "../debug/Debug";
 import { INewOrder, OrderType } from "../utils/Interfaces";
 import { CACHE } from "../cache/Cache";
 import { overwriteShasso } from "../cache/redirectHandlers";
-import { CookieCache } from "../lib/Cache";
 import { fetchUrlRedirectCallback } from "../lib/callback";
 
 export async function GetOrders(type: OrderType, page: number = 0): Promise<INewOrder[]> {
@@ -27,7 +26,6 @@ export async function GetOrders(type: OrderType, page: number = 0): Promise<INew
             'sec-fetch-dest': 'document',
             'referer': 'https://www.g2g.com/order/sellOrder?status=5',
             'accept-language': 'en-US;q=0.9,en;q=0.8,lt;q=0.7',
-            'cookie': CookieCache.HostCacheToString(CACHE.get("www.g2g.com")!)
         }
     };
 

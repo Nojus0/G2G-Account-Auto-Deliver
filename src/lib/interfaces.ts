@@ -8,6 +8,12 @@ export interface IRedirectEndCallback {
     (onFinished: AxiosResponse, currentHostCache: Map<string, string>): void | Promise<void>
 }
 
+export interface IRedirect {
+    beforeSend(beforeRedirect: AxiosRequestConfig, currentHostCache: Map<string, string>): void | Promise<void>
+    onFinished(onFinished: AxiosResponse, currentHostCache: Map<string, string>): void | Promise<void>
+
+}
+
 export type ICache = Map<string, Map<string, string>>;
 
 export type IHostCache = Map<string, string>

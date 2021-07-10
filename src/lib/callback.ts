@@ -1,13 +1,12 @@
 import { AxiosRequestConfig, AxiosResponse } from "axios";
-import { ICache, IRedirectCallback, IRedirectEndCallback } from "./interfaces";
+import { ICache, IRedirect, IRedirectCallback, IRedirectEndCallback } from "./interfaces";
 import { SafeFetch } from "./utils";
 import tough from "tough-cookie";
 
 export async function fetchUrlRedirectCallback(
     requestConfig: AxiosRequestConfig,
     COOKIE_CACHE: ICache,
-    beforeFollowRedirect: IRedirectCallback,
-    onFinished: IRedirectEndCallback = () => { },
+    { beforeSend, onFinished }: IRedirect,
 ): Promise<AxiosResponse> {
 
     ValidateWebsiteCache(COOKIE_CACHE, requestConfig.url);
@@ -15,7 +14,7 @@ export async function fetchUrlRedirectCallback(
     const WEBSITE = new URL(requestConfig.url);
     const CURRENT_HOST_CACHE = COOKIE_CACHE.get(WEBSITE.host);
 
-    await beforeFollowRedirect(requestConfig, CURRENT_HOST_CACHE);
+    await beforeSend(requestConfig, CURRENT_HOST_CACHE);
 
     requestConfig.maxRedirects = 0;
     const RESPONSE: AxiosResponse = await SafeFetch(requestConfig)
@@ -39,7 +38,7 @@ export async function fetchUrlRedirectCallback(
     }
 
 
-    return await fetchUrlRedirectCallback({ url: RESPONSE.headers.location, maxRedirects: 0 }, COOKIE_CACHE, beforeFollowRedirect, onFinished);
+    return await fetchUrlRedirectCallback({ url: RESPONSE.headers.location, maxRedirects: 0 }, COOKIE_CACHE, { beforeSend, onFinished });
 
 }
 
