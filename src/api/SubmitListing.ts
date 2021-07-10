@@ -1,8 +1,11 @@
 import axios, { AxiosRequestConfig } from "axios";
 import qs from "querystring"
-import { Services, Country, SubmitListingResponse, ISubmitListingData } from "./Interfaces"
+import { CookieCache } from "redirect-cookies"
+import { CACHE } from "../cache/Cache";
+import { ISettings } from "../settings/SettingsManager";
+import { Services, Country, SubmitListingResponse, ISubmitListingData } from "../utils/Interfaces"
 
-export async function SubmitListing(Cookies: string, listing: ISubmitListingData) {
+export async function SubmitListing(listing: ISubmitListingData) {
     const { Currency, Delivery_Time_Offline_Hours, Delivery_Time_Online_Hours, Listing_Description,
         Listing_Duration_Days, Listing_Insurance_Days, Listing_Title, Price, country, game, platform,
         service, subgame, AgreeToTermsAndPolicies } = listing;
@@ -43,7 +46,7 @@ export async function SubmitListing(Cookies: string, listing: ISubmitListingData
             'sec-fetch-dest': 'empty',
             'referer': 'https://www.g2g.com/sell/index',
             'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,lt;q=0.7',
-            'cookie': Cookies
+            'cookie': CookieCache.HostCacheToString(CACHE.get("www.g2g.com")!)
         },
         data: data
     };

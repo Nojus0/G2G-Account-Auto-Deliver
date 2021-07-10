@@ -1,35 +1,23 @@
 import { GetOrders } from "./NewOrders";
 import path from "path"
-import { Config } from "./Config";
+import { Config } from "../settings/Config";
 import { DeliverOrder } from "./DeliverOrder";
-import { IsDebug } from "./Debug";
-import { IAccountJson, INewOrder, OrderType } from "./Interfaces";
+import { IsDebug } from "../debug/Debug";
+import { IAccountJson, INewOrder, OrderType } from "../utils/Interfaces";
+import { ISettings } from "../settings/SettingsManager";
 
 export class AutoDeliver {
-    cookies: string
+    settings: ISettings
     private interval: number
     private accountsPath: string
     private IsRunning: boolean
     private AccountsManager: Config<IAccountJson[]>;
-    constructor(Cookies: string, Interval: number) {
+    constructor(settings: ISettings, Interval: number) {
         this.interval = Interval
-        this.cookies = Cookies;
+        this.settings = settings;
         this.IsRunning = false;
         this.accountsPath = path.join(__dirname, "accounts.json")
-        this.AccountsManager = new Config<IAccountJson[]>(this.accountsPath, [{
-            account_id: "My Account",
-            account_country: "Lithuania",
-            additional_note: "....",
-            date_of_birth: "0000-0000",
-            email_account: "email@duckmail.com",
-            email_password: "shitter",
-            first_name: "John",
-            last_name: "Deer",
-            password: "Johndeer",
-            secret_answer: "Who im i?",
-            secret_question: "Me",
-            target_title: "MY ACCOUNT RANK 40 #12"
-        }]);
+        this.AccountsManager = new Config<IAccountJson[]>(this.accountsPath, []);
     }
 
     getSpecifiedDelivery(order_title: string) {
@@ -60,12 +48,12 @@ export class AutoDeliver {
     private async RunMethod() {
         if (!this.IsRunning) return;
 
-        const NEW_ORDERS: INewOrder[] = await GetOrders(this.cookies, OrderType.NewOrders);
+        const NEW_ORDERS: INewOrder[] = await GetOrders(OrderType.NewOrders);
         
         for (const ORDER of NEW_ORDERS) {
             const DELIVERY = this.getSpecifiedDelivery(ORDER.ItemTitle); if (DELIVERY == null) { console.log(`Order recieved but no account was found for specified order title (target_title)`); break; }
 
-            await DeliverOrder(DELIVERY, ORDER.OID, this.cookies);
+            await DeliverOrder(DELIVERY, ORDER.OID, this.settings);
 
             console.log(`Delivered account: ${DELIVERY.account_id}`)
         }

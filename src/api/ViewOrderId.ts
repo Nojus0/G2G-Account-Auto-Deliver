@@ -1,13 +1,15 @@
 import axios, { AxiosRequestConfig } from "axios"
 import qs from "querystring"
-
-export async function StartTradeOrderId(orderid: number, cookies: string) {
+import { CACHE, getCookieStringFromSettings } from "../cache/Cache";
+import { IViewOrderIDResponse } from "../utils/Interfaces";
+import { CookieCache } from "redirect-cookies"
+export async function ViewOrderId(orderid: number) {
     const data = qs.stringify({
-        'sell_order_id': orderid
+        sell_order_id: orderid
     });
     const config: AxiosRequestConfig = {
         method: 'post',
-        url: 'https://www.g2g.com/order/sellOrder/acknowledge',
+        url: 'https://www.g2g.com/order/sellOrder/view',
         headers: {
             'authority': 'www.g2g.com',
             'sec-ch-ua': '"Google Chrome";v="89", "Chromium";v="89", ";Not A Brand";v="99"',
@@ -22,20 +24,19 @@ export async function StartTradeOrderId(orderid: number, cookies: string) {
             'sec-fetch-dest': 'empty',
             'referer': `https://www.g2g.com/order/sellOrder/order?oid=${orderid}`,
             'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,lt;q=0.7',
-            'cookie': cookies
+            'cookie': CookieCache.HostCacheToString(CACHE.get("www.g2g.com")!)
         },
         data: data
     };
 
     try {
-        await axios(config);
-        console.log(`Successfuly started trade for order ${orderid}`)
-        return true;
+        const response = await axios(config);
+        const model = <IViewOrderIDResponse>response.data;
+        if (model.status) { console.log(`Successfully Viewed Order ${orderid} Details`); return true; }
+        else { console.log(`Failed Viewing order ${orderid}. Response: ${JSON.stringify(response.data)}`); return false };
     } catch (err) {
-        console.log(`Server responded with error for order ${orderid}`);
+        console.log(`Server responded with an error, for view order id ${orderid}`);
         return false;
     }
 
 }
-
-

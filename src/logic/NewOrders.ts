@@ -1,11 +1,12 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { load } from "cheerio";
-import { GetOrdersDebugValid, IsDebug } from "./Debug";
-import { INewOrder, OrderType } from "./Interfaces";
-import { SetSettings } from "./SettingsManager";
-import cookie from "cookie"
+import { GetOrdersDebugValid, IsDebug } from "../debug/Debug";
+import { INewOrder, OrderType } from "../utils/Interfaces";
+import { fetchUrlRedirectCallback, CookieCache } from "redirect-cookies"
+import { CACHE } from "../cache/Cache";
+import { overwriteShasso } from "../cache/redirectHandlers";
 
-export async function GetOrders(cookies: string, type: OrderType, page: number = 0): Promise<INewOrder[]> {
+export async function GetOrders(type: OrderType, page: number = 0): Promise<INewOrder[]> {
     if (IsDebug) return GetOrdersDebugValid();
 
     const config: AxiosRequestConfig = {
@@ -25,24 +26,14 @@ export async function GetOrders(cookies: string, type: OrderType, page: number =
             'sec-fetch-dest': 'document',
             'referer': 'https://www.g2g.com/order/sellOrder?status=5',
             'accept-language': 'en-US;q=0.9,en;q=0.8,lt;q=0.7',
-            'cookie': cookies
+            'cookie': CookieCache.HostCacheToString(CACHE.get("www.g2g.com")!)
         }
     };
 
     try {
-        const response = await axios(config);
-        for (const header of response.headers["set-cookie"]) {
-            const COOKIE = cookie.parse(header);
-            if(COOKIE.G2GSESID_V4 === undefined) continue;
+        const RESPONSE = await fetchUrlRedirectCallback(config, CACHE, overwriteShasso());
 
-            SetSettings({
-                G2GSESID_V4: COOKIE.G2GSESID_V4,
-                IsDebug: IsDebug
-            })
-            console.log(header)
-        }
-
-        return ParseSoldOrdersHtml(load(response.data), type);
+        return ParseSoldOrdersHtml(load(RESPONSE.data), type);
     } catch (err) { console.log(`Server responded with an error when getting new orders, ${err.message}`); return []; }
 }
 
@@ -53,9 +44,9 @@ function ParseSoldOrdersHtml(root: cheerio.Root, Type: OrderType): INewOrder[] {
         const ItemName = root(".sales-history__product-name", item).text();
         const Price = root(".sales-history__table-price", item).text();
         const OrderId: number = Number(root(".sales-history__product-id", item)?.attr("href")?.match(/(?<=oid=)\d+/));
-        
-        if(isNaN(OrderId)) return NewOrders;
-        
+
+        if (isNaN(OrderId)) return NewOrders;
+
         let type = Type;
 
         if (Type === OrderType.All) {

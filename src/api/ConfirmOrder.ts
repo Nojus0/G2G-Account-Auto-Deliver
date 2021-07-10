@@ -1,8 +1,11 @@
 import axios, { AxiosRequestConfig } from "axios"
 import qs from "querystring"
-import { IAccountDeliver } from "./Interfaces";
+import { CookieCache } from "redirect-cookies";
+import { CACHE, getCookieStringFromSettings } from "../cache/Cache";
+import { ISettings } from "../settings/SettingsManager";
+import { IAccountDeliver } from "../utils/Interfaces";
 
-export async function ConfirmOrder(data: IAccountDeliver, cookies: string) {
+export async function ConfirmOrder(data: IAccountDeliver) {
     const Data = qs.stringify({
         ...data,
         cbp: data.id - 40
@@ -22,9 +25,8 @@ export async function ConfirmOrder(data: IAccountDeliver, cookies: string) {
             'sec-fetch-site': 'same-origin',
             'sec-fetch-mode': 'cors',
             'sec-fetch-dest': 'empty',
-            'referer': 'https://www.g2g.com/order/sellOrder/order?oid=6135859',
             'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,lt;q=0.7',
-            'cookie': cookies
+            'cookie': CookieCache.HostCacheToString(CACHE.get("www.g2g.com")!)
         },
         data: Data
     };

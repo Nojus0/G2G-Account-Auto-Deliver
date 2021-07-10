@@ -1,4 +1,4 @@
-import { INewOrder, OrderType } from "./Interfaces";
+import { INewOrder, OrderType } from "../utils/Interfaces";
 
 export let IsDebug = false;
 

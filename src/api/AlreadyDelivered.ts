@@ -1,40 +1,8 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { load } from "cheerio";
-import { INewOrder, IRAWAccount, OrderType } from "./Interfaces";
-import { GetOrders } from "./NewOrders";
-import { L_SETTINGS } from "./SettingsManager";
-
-export async function GetAllOrders(offset = 0) {
-    let PAGE = offset;
-
-    let ALL_ORDERS: INewOrder[] = [];
-    while (true) {
-        const ORDERS = await GetOrders(L_SETTINGS.G2GSESID_V4, OrderType.All, PAGE);
-
-        if (ORDERS.length <= 0) break;
-
-        ALL_ORDERS = [...ALL_ORDERS, ...ORDERS];
-
-        PAGE++;
-    }
-    return ALL_ORDERS;
-}
-
-// Could add async, with promise all but i think it will be rate limited. try this later.
-
-export async function IsAlreadyDelivered(account_id: string, password?: string, offset = 0) {
-    const ACCOUNTS = await GetAllOrders(offset);
-
-    for (const ORDER of ACCOUNTS) {
-        const DELIVERY_DETAILS = await GetDelivered(ORDER.OID);
-
-        if (password === undefined) {
-            if (DELIVERY_DETAILS.account_id === account_id) return ORDER;
-        } else
-            if (DELIVERY_DETAILS.account_id === account_id && DELIVERY_DETAILS.password === password) return ORDER;
-    }
-    return null;
-}
+import { INewOrder, IRAWAccount, OrderType } from "../utils/Interfaces";
+import { CACHE, } from "../cache/Cache";
+import { CookieCache } from "redirect-cookies";
 
 export async function GetDelivered(OID: number): Promise<IRAWAccount> {
     const config: AxiosRequestConfig = {
@@ -55,7 +23,7 @@ export async function GetDelivered(OID: number): Promise<IRAWAccount> {
             'sec-fetch-dest': 'document',
             'referer': 'https://www.g2g.com/order/sellOrder/index?status=0&page=4',
             'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,lt;q=0.7',
-            'cookie': L_SETTINGS.G2GSESID_V4
+            'cookie': CookieCache.HostCacheToString(CACHE.get("www.g2g.com")!)
         }
     };
 
