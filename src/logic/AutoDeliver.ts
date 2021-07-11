@@ -1,25 +1,19 @@
 import { GetOrders } from "./NewOrders";
-import path from "path"
-import { Config } from "../settings/Config";
 import { DeliverOrder } from "./DeliverOrder";
 import { IsDebug } from "../debug/Debug";
 import { IAccountJson, INewOrder, OrderType } from "../utils/Interfaces";
-import { ISettings } from "../settings/SettingsManager";
+import { ACCOUNT_MANAGER } from "../settings/SettingsManager";
 
 export class AutoDeliver {
     private interval: number
-    private accountsPath: string
     private IsRunning: boolean
-    private AccountsManager: Config<IAccountJson[]>;
-    constructor(settings: ISettings, Interval: number) {
+    constructor(Interval: number) {
         this.interval = Interval
         this.IsRunning = false;
-        this.accountsPath = path.join(__dirname, "accounts.json")
-        this.AccountsManager = new Config<IAccountJson[]>(this.accountsPath, []);
     }
 
     getSpecifiedDelivery(order_title: string) {
-        let ACCOUNTS: IAccountJson[] = this.AccountsManager.get();
+        let ACCOUNTS: IAccountJson[] = ACCOUNT_MANAGER.get();
 
         for (const account of ACCOUNTS)
             if (account.target_title == order_title) {
@@ -27,7 +21,7 @@ export class AutoDeliver {
 
                 if (IsDebug) return account;
 
-                this.AccountsManager.set(ACCOUNTS);
+                ACCOUNT_MANAGER.set(ACCOUNTS);
                 return account;
             }
 
@@ -48,6 +42,8 @@ export class AutoDeliver {
 
         const NEW_ORDERS: INewOrder[] = await GetOrders(OrderType.NewOrders);
 
+        if (NEW_ORDERS.length < 1) console.log(`No new orders found.`)
+
         for (const ORDER of NEW_ORDERS) {
             const DELIVERY = this.getSpecifiedDelivery(ORDER.ItemTitle); if (DELIVERY == null) { console.log(`Order recieved but no account was found for specified order title (target_title)`); break; }
 
@@ -56,7 +52,7 @@ export class AutoDeliver {
             console.log(`Delivered account: ${DELIVERY.account_id}`)
         }
 
-        setTimeout(() => this.RunMethod(), this.interval);
+        setTimeout(async () => await this.RunMethod(), this.interval);
     }
 }
 

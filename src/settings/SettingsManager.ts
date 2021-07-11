@@ -1,5 +1,6 @@
 import { Config } from "./Config";
 import path from "path"
+import { IAccountJson } from "../utils/Interfaces";
 
 const SETTINGS_PATH = path.resolve("Settings.json")
 
@@ -16,3 +17,6 @@ export interface ISettings {
     "ogm[un]": string,
     "ogm[uc]": string
 }
+
+
+export const ACCOUNT_MANAGER = new Config<IAccountJson[]>(path.resolve("Accounts.json"), []);
