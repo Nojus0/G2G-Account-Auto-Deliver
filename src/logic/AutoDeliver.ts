@@ -3,6 +3,7 @@ import { DeliverOrder } from "./DeliverOrder";
 import { IsDebug } from "../debug/Debug";
 import { IAccountJson, INewOrder, OrderType } from "../utils/Interfaces";
 import { ACCOUNT_MANAGER } from "../settings/SettingsManager";
+import notifier from "node-notifier";
 
 export class AutoDeliver {
     private interval: number
@@ -47,12 +48,19 @@ export class AutoDeliver {
         for (const ORDER of NEW_ORDERS) {
             const DELIVERY = this.getSpecifiedDelivery(ORDER.ItemTitle); if (DELIVERY == null) { console.log(`Order recieved but no account was found for specified order title (target_title)`); break; }
 
-            await DeliverOrder(DELIVERY, ORDER.OID);
+            if (await DeliverOrder(DELIVERY, ORDER.OID))
+                this.notifyDelivered(ORDER.ItemTitle, DELIVERY.account_id);
+            else
+                this.notifyDelivered(ORDER.ItemTitle, DELIVERY.account_id, false);
 
-            console.log(`Delivered account: ${DELIVERY.account_id}`)
         }
 
         setTimeout(async () => await this.RunMethod(), this.interval);
+    }
+
+    notifyDelivered(ItemTitle: string, account_id: string, success: boolean = true) {
+        notifier.notify({ wait: true, title: success ? "Account delivered" : "Failled to deliver", message: `${ItemTitle}\n\r${account_id}` })
+        console.log(success ? `Account delivered: ${account_id}` : `Failled to deliver: ${account_id}`);
     }
 }
 
