@@ -1,0 +1,26 @@
+const path = require('path');
+
+module.exports = {
+    entry: {
+        main: './src/server.ts'
+    },
+    mode: "production",
+    target: "node",
+    output: {
+        filename: 'g2g.bundle.js',
+        path: path.resolve(__dirname, 'dist')
+    },
+    externals: path.join(__dirname, "node_modules"),
+    resolve: {
+        extensions: ['.ts', '.js']
+    },
+    module: {
+        rules: [
+            {
+                test: /\.ts$/,
+                exclude: [/node_modules/],
+                use: 'awesome-typescript-loader'
+            }
+        ]
+    },
+};
