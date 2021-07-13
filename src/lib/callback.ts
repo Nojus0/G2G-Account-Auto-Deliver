@@ -1,5 +1,5 @@
 import { AxiosRequestConfig, AxiosResponse } from "axios";
-import { ICache, IRedirect, IRedirectCallback, IRedirectEndCallback } from "./interfaces";
+import { ICache, IRedirect } from "./interfaces";
 import { SafeFetch } from "./utils";
 import tough from "tough-cookie";
 
@@ -25,7 +25,7 @@ export async function fetchUrlRedirectCallback(
 
     for (const RAW_COOKIE of SET_COOKIES) {
         const COOKIE = tough.parse(RAW_COOKIE);
-
+        
         CURRENT_HOST_CACHE.set(COOKIE.key, COOKIE.value);
 
         COOKIE_CACHE.set(WEBSITE.host, CURRENT_HOST_CACHE);
@@ -43,11 +43,13 @@ export async function fetchUrlRedirectCallback(
 }
 
 
+
+// ! TODO REPLACE CACHE WITH OBJECTS/ARRAYS INSTEAD OF MAPS 
 export function ValidateWebsiteCache(
     COOKIE_CACHE: ICache, // * Passed by reference *
     url: string
 ) {
-
+    
     const WEBSITE = new URL(url);
 
     if (!COOKIE_CACHE.has(WEBSITE.host))

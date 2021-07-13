@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from "axios";
+import { AxiosRequestConfig } from "axios";
 import { load } from "cheerio";
 import { IRAWAccount, } from "../utils/Interfaces";
 import { CACHE, } from "../cache/Cache";

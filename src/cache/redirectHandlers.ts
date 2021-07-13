@@ -3,11 +3,9 @@ import { CookieCache } from "../lib/Cache";
 import { IHostCache, IRedirect } from "../lib/interfaces";
 import { SETTINGS } from "../settings/SettingsManager";
 
-
 export const overwriteShasso: IRedirect = {
     beforeSend, onFinished
 }
-
 
 function beforeSend(req_cfg: AxiosRequestConfig, host_cache: IHostCache) {
 

@@ -1,5 +1,4 @@
 const path = require('path');
-
 module.exports = {
     entry: {
         main: './src/server.ts'
@@ -10,7 +9,7 @@ module.exports = {
         filename: 'g2g.bundle.js',
         path: path.resolve(__dirname, 'dist')
     },
-    externals: path.join(__dirname, "node_modules"),
+    externals: path.resolve(__dirname, "node_modules"),
     resolve: {
         extensions: ['.ts', '.js']
     },

@@ -1,6 +1,7 @@
 import { CookieCache } from "../lib/Cache";
 import { ISettings } from "../settings/SettingsManager";
 
+// ! TODO REPLACE CACHE WITH OBJECTS/ARRAYS INSTEAD OF MAPS 
 export const CACHE = CookieCache.Create();
 
 export function getCookieStringFromSettings(settings: ISettings): string {
