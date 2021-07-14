@@ -4,10 +4,7 @@ on:
   push:
     tags:
     - '*'
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
+    
 jobs:
   build:
 
@@ -23,6 +20,6 @@ jobs:
       - run: npm run build
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "./dist/"
+          artifacts: "dist/*"
           bodyFile: "auto release"
           token: ${{ secrets.GITHUB_TOKEN }}
