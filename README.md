@@ -1,8 +1,7 @@
 ## About
-#### Delivers account orders automatically using ogm[un] and ogm[uc] cookies from www.shasso.com.
+#### Delivers account orders automatically using G2GSESID_V4 session cookie.
 ## Cookies
-#### `ogm[uc]` - Random hex string which has a dot approximately in the middle of the string.
-#### `ogm[un]` - Url encoded email address.
+#### `G2GSESID_V4` - Random text.
 ## Installation
 #### Download the `G2G-Account-Auto-Deliver` repository.
 #### Open terminal in the folder you see `package.json`.
@@ -10,8 +9,8 @@
 #### Build the javascript bundle by running `npm run build`.
 #### Launch the app by running `npm start`
 ## Settings
-#### Enter your ogm[un] and ogm[uc] cookies into Settings.json file which will be generated when you first run the app.
-#### Access the cookies by going to www.shasso.com then pressing CTRL + SHIFT + I -> Application -> Cookies -> www.shasso.com
+#### Enter your G2GSESID_V4 cookie into Settings.json file which will be generated when you first run the app.
+#### Access the cookie by going to www.g2g.com then pressing CTRL + SHIFT + I -> Application -> Cookies -> https://www.g2g.com -> G2GSESID_V4 -> Value
 ## Accounts
 ```
 [
