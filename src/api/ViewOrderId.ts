@@ -1,8 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios"
 import qs from "querystring"
-import { CACHE } from "../cache/Cache";
-import { overwriteShasso } from "../cache/redirectHandlers";
-import { fetchUrlRedirectCallback } from "../lib/callback";
+import { SETTINGS } from "../settings/SettingsManager";
 import { IViewOrderIDResponse } from "../utils/Interfaces";
 export async function ViewOrderId(orderid: number) {
     
@@ -27,12 +25,13 @@ export async function ViewOrderId(orderid: number) {
             'sec-fetch-dest': 'empty',
             'referer': `https://www.g2g.com/order/sellOrder/order?oid=${orderid}`,
             'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,lt;q=0.7',
+            cookie: SETTINGS.cookie
         },
         data: data
     };
 
     try {
-        const response = await fetchUrlRedirectCallback(config, CACHE, overwriteShasso);
+        const response = await axios(config)
 
         const model = <IViewOrderIDResponse>response.data;
         if (model.status) { console.log(`Successfully Viewed Order ${orderid} Details`); return true; }

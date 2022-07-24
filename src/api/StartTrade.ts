@@ -1,8 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios"
 import qs from "querystring"
-import { CACHE } from "../cache/Cache";
-import { overwriteShasso } from "../cache/redirectHandlers";
-import { fetchUrlRedirectCallback } from "../lib/callback";
+import { SETTINGS } from "../settings/SettingsManager";
 
 export async function StartTradeOrderId(orderid: number) {
     const data = qs.stringify({
@@ -25,12 +23,13 @@ export async function StartTradeOrderId(orderid: number) {
             'sec-fetch-dest': 'empty',
             'referer': `https://www.g2g.com/order/sellOrder/order?oid=${orderid}`,
             'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,lt;q=0.7',
+            cookie: SETTINGS.cookie
         },
         data: data
     };
 
     try {
-        await fetchUrlRedirectCallback(config, CACHE, overwriteShasso);
+        await axios(config)
         console.log(`Successfuly started trade for order ${orderid}`)
         return true;
     } catch (err) {

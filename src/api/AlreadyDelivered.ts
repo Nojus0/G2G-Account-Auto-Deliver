@@ -1,9 +1,7 @@
-import { AxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import { load } from "cheerio";
+import { SETTINGS } from "../settings/SettingsManager";
 import { IRAWAccount, } from "../utils/Interfaces";
-import { CACHE, } from "../cache/Cache";
-import { fetchUrlRedirectCallback } from "../lib/callback";
-import { overwriteShasso } from "../cache/redirectHandlers";
 
 export async function GetDelivered(OID: number): Promise<IRAWAccount> {
     const config: AxiosRequestConfig = {
@@ -24,10 +22,11 @@ export async function GetDelivered(OID: number): Promise<IRAWAccount> {
             'sec-fetch-dest': 'document',
             'referer': 'https://www.g2g.com/order/sellOrder/index?status=0&page=4',
             'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,lt;q=0.7',
+            cookie: SETTINGS.cookie
         }
     };
 
-    const response = await fetchUrlRedirectCallback(config, CACHE, overwriteShasso)
+    const response = await axios(config)
     return ParseDeliveredPage(load(response.data));
 }
 
