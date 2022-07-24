@@ -9,9 +9,10 @@
 #### Build the javascript bundle by running `npm run build`.
 #### Launch the app by running `npm start`
 ## Settings
-#### Enter your G2GSESID_V4 cookie into Settings.json file which will be generated when you first run the app.
+#### Enter your G2GSESID_V4 cookie into `Settings.json` file which will be generated when you first run the app.
 #### Access the cookie by going to www.g2g.com then pressing CTRL + SHIFT + I -> Application -> Cookies -> https://www.g2g.com -> G2GSESID_V4 -> Value
 ## Accounts
+#### The `Accounts.json` file will be generated when the application is run for the first time.
 ```
 [
   {
