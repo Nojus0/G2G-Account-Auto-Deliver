@@ -1,17 +1,23 @@
 ## About
-#### Delivers account orders automatically using G2GSESID_V4 session cookie.
+#### Delivers account orders automatically using `active_device_token` and `refresh_token` cookies.
 ## Cookies
 #### `G2GSESID_V4` - Random text.
+#### `refresh_token` - Random text with a dot
+#### `active_device_token` - Random text
 ## Installation
+#### Install `Node.js` if you haven't already.
 #### Download the `G2G-Account-Auto-Deliver` repository.
 #### Open terminal in the folder you see `package.json`.
 #### Install dependencies by running `npm install`.
 #### Build the javascript bundle by running `npm run build`.
-#### Launch the app by running `npm start`
+#### Launch the app by running `npm start`.
+#### Enter your cookies in to the generated `Settings.json` file.
+#### Enter your accounts in to the generated `Accounts.json` file.
+#### Launch the app again and you are done.
+
 ## Settings
-#### Enter your G2GSESID_V4 cookie into `Settings.json` file which will be generated when you first run the app.
-#### Access the cookie by going to www.g2g.com then pressing CTRL + SHIFT + I -> Application -> Cookies -> https://www.g2g.com -> G2GSESID_V4 -> Value
-## Accounts
+#### Enter your `refresh_token` and `active_device_token` cookies into `Settings.json` file which will be generated when you first run the app, entering `G2GSESID_V4` is not necessary.
+#### Access the cookie by going to www.g2g.com then pressing CTRL + SHIFT + I -> Application -> Cookies -> https://www.g2g.com
 #### The `Accounts.json` file will be generated when the application is run for the first time.
 ```
 [
