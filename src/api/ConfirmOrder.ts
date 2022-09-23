@@ -2,6 +2,7 @@ import axios, { AxiosRequestConfig } from "axios"
 import qs from "querystring"
 import { SETTINGS } from "../settings/SettingsManager";
 import { IAccountDeliver } from "../utils/Interfaces";
+import {AxiosHooked} from "../lib/AxiosHooked";
 
 export async function ConfirmOrder(data: IAccountDeliver) {
     const Data = qs.stringify({
@@ -30,7 +31,7 @@ export async function ConfirmOrder(data: IAccountDeliver) {
     };
 
     try {
-        await axios(config)
+        await AxiosHooked(config)
         console.log(`Successfuly completed for order ${data.id}`)
         return true;
     } catch (err) {

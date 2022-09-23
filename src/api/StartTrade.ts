@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios"
 import qs from "querystring"
 import { SETTINGS } from "../settings/SettingsManager";
+import {AxiosHooked} from "../lib/AxiosHooked";
 
 export async function StartTradeOrderId(orderid: number) {
     const data = qs.stringify({
@@ -29,7 +30,7 @@ export async function StartTradeOrderId(orderid: number) {
     };
 
     try {
-        await axios(config)
+        await AxiosHooked(config)
         console.log(`Successfuly started trade for order ${orderid}`)
         return true;
     } catch (err) {

@@ -2,6 +2,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import { load } from "cheerio";
 import { SETTINGS } from "../settings/SettingsManager";
 import { IRAWAccount, } from "../utils/Interfaces";
+import {AxiosHooked} from "../lib/AxiosHooked";
 
 export async function GetDelivered(OID: number): Promise<IRAWAccount> {
     const config: AxiosRequestConfig = {
@@ -26,7 +27,7 @@ export async function GetDelivered(OID: number): Promise<IRAWAccount> {
         }
     };
 
-    const response = await axios(config)
+    const response = await AxiosHooked(config)
     return ParseDeliveredPage(load(response.data));
 }
 

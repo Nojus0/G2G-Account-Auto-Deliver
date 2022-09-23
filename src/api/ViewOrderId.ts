@@ -2,6 +2,7 @@ import axios, { AxiosRequestConfig } from "axios"
 import qs from "querystring"
 import { SETTINGS } from "../settings/SettingsManager";
 import { IViewOrderIDResponse } from "../utils/Interfaces";
+import {AxiosHooked} from "../lib/AxiosHooked";
 export async function ViewOrderId(orderid: number) {
     
     const data = qs.stringify({
@@ -31,7 +32,7 @@ export async function ViewOrderId(orderid: number) {
     };
 
     try {
-        const response = await axios(config)
+        const response = await AxiosHooked(config)
 
         const model = <IViewOrderIDResponse>response.data;
         if (model.status) { console.log(`Successfully Viewed Order ${orderid} Details`); return true; }

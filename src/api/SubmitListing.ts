@@ -2,6 +2,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import qs from "querystring";
 import { SETTINGS } from "../settings/SettingsManager";
 import { SubmitListingResponse, ISubmitListingData } from "../utils/Interfaces";
+import {AxiosHooked} from "../lib/AxiosHooked";
 
 export async function SubmitListing(listing: ISubmitListingData) {
   const {
@@ -63,7 +64,7 @@ export async function SubmitListing(listing: ISubmitListingData) {
     data: data,
   };
   try {
-    const response = await axios(config);
+    const response = await AxiosHooked(config);
     return <SubmitListingResponse>response.data;
   } catch (err) {
     const fail: SubmitListingResponse = { status: false };

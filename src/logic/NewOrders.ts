@@ -3,6 +3,7 @@ import { load } from "cheerio";
 import { GetOrdersDebugValid, IsDebug } from "../debug/Debug";
 import { SETTINGS } from "../settings/SettingsManager";
 import { INewOrder, OrderType } from "../utils/Interfaces";
+import {AxiosHooked} from "../lib/AxiosHooked"
 
 export async function GetOrders(
   type: OrderType,
@@ -13,6 +14,7 @@ export async function GetOrders(
   const config: AxiosRequestConfig = {
     method: "get",
     url: `https://www.g2g.com/order/sellOrder?status=${type}&page=${page}`,
+    maxRedirects: 0,
     headers: {
       authority: "www.g2g.com",
       "cache-control": "max-age=0",
@@ -35,7 +37,7 @@ export async function GetOrders(
   };
 
   try {
-    const RESPONSE = await axios(config)
+    const RESPONSE = await AxiosHooked(config)
 
     return ParseSoldOrdersHtml(load(RESPONSE.data), type);
   } catch (err) {

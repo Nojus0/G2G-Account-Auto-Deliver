@@ -1,6 +1,6 @@
-import { Config } from "./Config";
+import {Config} from "./Config";
 import path from "path"
-import { IAccountJson } from "../utils/Interfaces";
+import {IAccountJson} from "../utils/Interfaces";
 
 const SETTINGS_PATH = path.resolve("Settings.json")
 
@@ -12,23 +12,32 @@ export const DEFAULTS = {
 
 export const SETTINGS_MANAGER = new Config<ISettings>(SETTINGS_PATH, {
     IsDebug: false,
-    "G2GSESID_V4": DEFAULTS.G2GSESID_V4
+    G2GSESID_V4: DEFAULTS.G2GSESID_V4,
+    refresh_token: "hex string with dot",
+    active_device_token: "hex string"
 });
 
-const SettingsTemp = SETTINGS_MANAGER.get()
 
 export const SETTINGS = {
-    ...SettingsTemp,
     get cookie(): string {
-        const cookie = `G2GSESID_V4=${SettingsTemp.G2GSESID_V4};`
-        return cookie
+        const LOADED_SETTINGS = SETTINGS_MANAGER.get()
+        return `G2GSESID_V4=${LOADED_SETTINGS.G2GSESID_V4 || "77777777777777777777777777"};active_device_token=${LOADED_SETTINGS.active_device_token};refresh_token=${LOADED_SETTINGS.refresh_token};`
+    },
+    setG2GSESID_V4(val: string) {
+        const LOADED_SETTINGS = SETTINGS_MANAGER.get()
+        SETTINGS_MANAGER.set({
+            ...LOADED_SETTINGS,
+            G2GSESID_V4: val,
+        })
     }
 }
 
 
 export interface ISettings {
     IsDebug: boolean,
-    "G2GSESID_V4": string
+    G2GSESID_V4: string
+    refresh_token: string
+    active_device_token: string
 }
 
 
