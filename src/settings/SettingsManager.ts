@@ -7,14 +7,16 @@ const SETTINGS_PATH = path.resolve("Settings.json")
 export const ACCOUNT_MANAGER = new Config<IAccountJson[]>(path.resolve("Accounts.json"), []);
 
 export const DEFAULTS = {
-    G2GSESID_V4: "g2g session cookie"
+    G2GSESID_V4: "random_text",
+    refresh_token: "hex string with dot",
+    active_device_token: "hex string"
 }
 
 export const SETTINGS_MANAGER = new Config<ISettings>(SETTINGS_PATH, {
     IsDebug: false,
     G2GSESID_V4: DEFAULTS.G2GSESID_V4,
-    refresh_token: "hex string with dot",
-    active_device_token: "hex string"
+    refresh_token: DEFAULTS.refresh_token,
+    active_device_token: DEFAULTS.active_device_token
 });
 
 

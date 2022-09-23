@@ -1,4 +1,3 @@
 node_modules
 dist
-accounts.json
-Settings.json
+*.json
